@@ -26,6 +26,7 @@ public class Board {
     public Board() {
         //This construstor run the game by method restartGame().
         restartGame();
+        System.out.println("gra uruchomiona");
     }
 
     public static MainPice getTempPiece() {
