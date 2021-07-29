@@ -6,8 +6,6 @@ import pl.pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Promotion extends JFrame {
 
@@ -19,9 +17,9 @@ public class Promotion extends JFrame {
     private JButton bishopButton;
     private JButton knightButton;
     private JPanel panel;
-    private int idPice;
-    private boolean colorOfPice;
-    private Point point;
+    private int idPiece;
+    private final boolean colorOfPiece;
+    private final Point point;
 
     public JPanel getPanel() {
         return panel;
@@ -37,10 +35,10 @@ public class Promotion extends JFrame {
 
     public Promotion(JFrame frame) {
         setSize(new Dimension(WIDTH_ICON, HEIGHT_ICON));
-        if(Board.tempPiece.isItWhite())lookForPice(Board.white_pieces,Board.tempPiece.getPointWhereIsPiece());
-        else lookForPice(Board.black_pieces,Board.tempPiece.getPointWhereIsPiece());
+        if(Board.tempPiece.isItWhite()) lookForPiece(Board.white_pieces,Board.tempPiece.getPointWhereIsPiece());
+        else lookForPiece(Board.black_pieces,Board.tempPiece.getPointWhereIsPiece());
 
-        colorOfPice= Board.tempPiece.isItWhite();
+        colorOfPiece = Board.tempPiece.isItWhite();
         point=Board.tempPiece.getPointWhereIsPiece();
 
         if(Board.tempPiece.isItWhite()){
@@ -63,49 +61,41 @@ public class Promotion extends JFrame {
             rookButton.setIcon(iconRook);
         }
 
-        queenButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(colorOfPice) Board.white_pieces[idPice] = new Queen(point, colorOfPice);
-                else Board.black_pieces[idPice] = new Queen(point, colorOfPice);
-                Board.board[point.x][point.y] = "Q  ";
-                frame.dispose();
-            }
+        queenButton.addActionListener(e -> {
+            if(colorOfPiece) Board.white_pieces[idPiece] = new Queen(point, true);
+            else Board.black_pieces[idPiece] = new Queen(point, false);
+            Board.board[point.x][point.y] = "Q  ";
+            frame.dispose();
         });
-        bishopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(colorOfPice) Board.white_pieces[idPice] = new Bishop(point, colorOfPice);
-                else Board.black_pieces[idPice] = new Bishop(point, colorOfPice);
-                Board.board[point.x][point.y] = "B  ";
-                frame.dispose();
-            }
+
+        bishopButton.addActionListener(e -> {
+            if(colorOfPiece) Board.white_pieces[idPiece] = new Bishop(point, true);
+            else Board.black_pieces[idPiece] = new Bishop(point, false);
+            Board.board[point.x][point.y] = "B  ";
+            frame.dispose();
         });
-        knightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(colorOfPice) Board.white_pieces[idPice] = new Knight(point, colorOfPice);
-                else Board.black_pieces[idPice] = new Knight(point, colorOfPice);
-                Board.board[point.x][point.y] = "L  ";
-                frame.dispose();
-            }
+
+        knightButton.addActionListener(e -> {
+            if(colorOfPiece) Board.white_pieces[idPiece] = new Knight(point, true);
+            else Board.black_pieces[idPiece] = new Knight(point, false);
+            Board.board[point.x][point.y] = "L  ";
+            frame.dispose();
         });
-        rookButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(colorOfPice) Board.white_pieces[idPice] = new Rook(point, colorOfPice);
-                else Board.black_pieces[idPice] = new Rook(point, colorOfPice);
-                Board.board[point.x][point.y] = "R  ";
-                frame.dispose();
-            }
+
+        rookButton.addActionListener(e -> {
+            if(colorOfPiece) Board.white_pieces[idPiece] = new Rook(point, true);
+            else Board.black_pieces[idPiece] = new Rook(point, false);
+            Board.board[point.x][point.y] = "R  ";
+            frame.dispose();
         });
+
     }
 
-    private void lookForPice(MainPice[] pices, Point point) {
-        //lookForPice looking for pice with Point which playsOfPice is equal Point(x,y)
-        for (int i = 0; i < pices.length; i++) {
-            if(pices[i].getPointWhereIsPiece().equals(point)) {
-                idPice=i;
+    private void lookForPiece(MainPiece[] pieces, Point point) {
+        //lookForPiece looking for piece with Point which playsOfPiece is equal Point(x,y)
+        for (int i = 0; i < pieces.length; i++) {
+            if(pieces[i].getPointWhereIsPiece().equals(point)) {
+                idPiece =i;
             }
         }
     }

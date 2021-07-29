@@ -4,8 +4,9 @@ import pl.Board.Board;
 import pl.Board.ImagesPieces;
 
 import java.awt.*;
+import java.util.Objects;
 
-public class Rook extends MainPice{
+public class Rook extends MainPiece {
     public Rook(Point point, boolean isItWhite) {
         super(point,isItWhite,"R  ");
     }
@@ -30,7 +31,7 @@ public class Rook extends MainPice{
         possibleRook(-1,0);
         possibleRook(0,1);
         possibleRook(0,-1);
-        if(choosedPiece){
+        if(chosePiece){
             try {
                 moveChecker();
             } catch (CloneNotSupportedException e) {
@@ -44,14 +45,14 @@ public class Rook extends MainPice{
         int tempX=placeOfPiece.x;
         int tempY= placeOfPiece.y;
         if(tempX+leftRight<8 &&  tempX+leftRight>-1 && tempY+upDown<8 && tempY+upDown>-1){
-            while (board[tempX+leftRight][tempY+upDown]==".  "||  board[tempX+leftRight][tempY+upDown]=="e"){
+            while (Objects.equals(board[tempX + leftRight][tempY + upDown], ".  ") || Objects.equals(board[tempX + leftRight][tempY + upDown], "e")){
                 possibleMoves[tempX+leftRight][tempY+upDown] = "Y";
                 tempY+=upDown;
                 tempX+=leftRight;
                 if(tempX+leftRight==8 ||  tempX+leftRight==-1 || tempY+upDown==8 || tempY+upDown==-1) break;
             }
             if(tempX+leftRight<8 &&  tempX+leftRight>-1 && tempY+upDown<8 && tempY+upDown>-1)
-            if (board[tempX+leftRight][tempY+upDown]!=".  "){
+            if (!Objects.equals(board[tempX + leftRight][tempY + upDown], ".  ")){
                 if(isItWhite) {
                     possibleBeat(Board.black_pieces,tempX+leftRight,tempY+upDown);
                 }else {
@@ -61,12 +62,13 @@ public class Rook extends MainPice{
         }
     }
 
-    private void possibleBeat(MainPice[] pieces, int tempX,int tempY) {
+    private void possibleBeat(MainPiece[] pieces, int tempX, int tempY) {
 
         Point temPoint = new Point(tempX, tempY);
-        for (int i = 0; i < pieces.length; i++) {
-            if(temPoint.equals(pieces[i].getPointWhereIsPiece())){
-                possibleMoves[tempX][tempY]="K";
+        for (MainPiece piece : pieces) {
+            if (temPoint.equals(piece.getPointWhereIsPiece())) {
+                possibleMoves[tempX][tempY] = "K";
+                break;
             }
         }
     }

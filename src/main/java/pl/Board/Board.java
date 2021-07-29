@@ -1,22 +1,22 @@
 package pl.Board;
 
-import pl.pieces.MainPice;
+import pl.pieces.MainPiece;
 
 import java.awt.*;
 
 /*
-* @parm board - Its String[][] which contains a board game.
-* @parm black_pices and white_pices - its contains the pices
-* @parm tempPice - contains choosen pice by user
-* @parm choosedPice - this boolean inform if the pice is choosen or not.
-* @parm textOntheEndGame - actually its return String which inform the players who won
+* @param board - Its String[][] which contains a board game.
+* @param black_pieces and white_pieces - its contains the pieces
+* @param tempPiece - contains chosen piece by user
+* @param chosePiece - this boolean inform if the piece is chosen or not.
+* @param textOnTheEndGame - actually its return String which inform the players who won
 */
 
 public class Board {
     public static String[][] board = new String[8][9];
-    public static MainPice[] black_pieces = new MainPice[16];
-    public static MainPice[] white_pieces = new MainPice[16];
-    public static MainPice tempPiece = null;
+    public static MainPiece[] black_pieces = new MainPiece[16];
+    public static MainPiece[] white_pieces = new MainPiece[16];
+    public static MainPiece tempPiece = null;
     private boolean chosePiece = false;
     private boolean isTurnWhite;
     private boolean isGameStillGoing = true;
@@ -24,13 +24,8 @@ public class Board {
     private String textOnTheEndGame;
 
     public Board() {
-        //This construstor run the game by method restartGame().
+        //This constructor run the game by method restartGame().
         restartGame();
-        System.out.println("gra uruchomiona");
-    }
-
-    public static MainPice getTempPiece() {
-        return tempPiece;
     }
 
     private  void deleteEFromBoard(){
@@ -39,7 +34,7 @@ public class Board {
         this method 'delete' this "e" from board.*/
         for (int X = 0; X < board.length; X++) {
             for (int Y = 0; Y < board.length; Y++) {
-                if(board[X][Y]=="e") {
+                if(board[X][Y].equals("e")) {
                     board[X][Y]=".  ";
                     break;
                 }
@@ -51,22 +46,22 @@ public class Board {
     public void setField(Point pointOfField) throws CloneNotSupportedException {
         /*
         * this method is run by class ChessPanel
-        * if user chose pice this method use other method ;)
+        * if user chose piece this method use other method ;)
         * */
 
-        if(chosePiece ==false){
-            if (board[pointOfField.x][pointOfField.y] != ".  ") {
+        if(!chosePiece){
+            if (!board[pointOfField.x][pointOfField.y].equals(".  ")) {
                 for (int i = 0; i < Board.white_pieces.length; i++) {
-                    if (white_pieces[i].getPointWhereIsPiece().equals(pointOfField) && isTurnWhite==true) {
+                    if (white_pieces[i].getPointWhereIsPiece().equals(pointOfField) && isTurnWhite) {
                         tempPiece = white_pieces[i];
                         chosePiece = true;
-                        white_pieces[i].setChoosedPiece(true);
+                        white_pieces[i].setChosePiece(true);
                         break;
                     }
-                    if (black_pieces[i].getPointWhereIsPiece().equals(pointOfField) && isTurnWhite==false) {
+                    if (black_pieces[i].getPointWhereIsPiece().equals(pointOfField) && !isTurnWhite) {
                         tempPiece = black_pieces[i];
                         chosePiece = true;
-                        black_pieces[i].setChoosedPiece(true);
+                        black_pieces[i].setChosePiece(true);
                         break;
                     }
                 }if(tempPiece!=null) {
@@ -102,39 +97,28 @@ public class Board {
 
     public void movePiece(Point pointClicked) throws CloneNotSupportedException {
         /*
-        this method runs only if the player chose pice
-        Y && E- means  -> yes, u can move here but you wouldn't beat the pice
-        K means  -> yes, u can move here but you wouldn't beat the pice
+        this method runs only if the player chose piece
+        Y && E- means  -> yes, u can move here, but you wouldn't beat the piece
+        K means  -> yes, u can move here, but you wouldn't beat the piece
         */
         chosePiece =false;
         if(tempPiece.getPossibleMoves()[pointClicked.x][pointClicked.y]!=null)
-        switch (tempPiece.getPossibleMoves()[pointClicked.x][pointClicked.y]){
-            case "Y":
-            case "K":
-                tempPiece.move(pointClicked);
-                deleteEFromBoard();
-                if (isTurnWhite) {
-                    isTurnWhite = false;
-                } else {
-                    isTurnWhite = true;
+            switch (tempPiece.getPossibleMoves()[pointClicked.x][pointClicked.y]) {
+                case "Y", "K" -> {
+                    tempPiece.move(pointClicked);
+                    deleteEFromBoard();
+                    isTurnWhite = !isTurnWhite;
                 }
-                break;
-            case "E":
-                deleteEFromBoard();
-                if(tempPiece.isItWhite())board[tempPiece.getPointWhereIsPiece().x][tempPiece.getPointWhereIsPiece().y-1]="e";
-                else board[tempPiece.getPointWhereIsPiece().x][tempPiece.getPointWhereIsPiece().y+1]="e";
-                tempPiece.move(pointClicked);
-
-                if (isTurnWhite) {
-                    isTurnWhite = false;
-                } else {
-                    isTurnWhite = true;
+                case "E" -> {
+                    deleteEFromBoard();
+                    if (tempPiece.isItWhite())
+                        board[tempPiece.getPointWhereIsPiece().x][tempPiece.getPointWhereIsPiece().y - 1] = "e";
+                    else board[tempPiece.getPointWhereIsPiece().x][tempPiece.getPointWhereIsPiece().y + 1] = "e";
+                    tempPiece.move(pointClicked);
+                    isTurnWhite = !isTurnWhite;
                 }
-                break;
-            default:
-                tempPiece=null;
-                break;
-        }
+                default -> tempPiece = null;
+            }
     }
 
     public String[][] getBoard() {
@@ -143,14 +127,14 @@ public class Board {
 
     public void isItEndGame() throws CloneNotSupportedException {
         if(isTurnWhite) {
-            if (checkmate.isItCheckmate(white_pieces)) endGame("wygrały czarne");
+            if (checkmate.isItCheckmate(white_pieces)) endGame("black won");
         } else {
-            if (checkmate.isItCheckmate(black_pieces)) endGame("Wygrały białe");
+            if (checkmate.isItCheckmate(black_pieces)) endGame("white won");
         }
     }
 
     public void restartGame() {
-        //this methoed at the begining runs game. And if players want to restart game, this program use it as well.
+        //this method at the beginning runs game. And if players want to restart game, this program use it as well.
         isGameStillGoing=true;
         isTurnWhite=true;
         for (int y = 0; y < board.length; y++) {
@@ -158,12 +142,12 @@ public class Board {
                 board[x][y] = ".  ";
             }
         }
-        Pices pices = new Pices(); // Creating new pices and assign them to parm
-        black_pieces=pices.getBlack_pieces();
-        white_pieces=pices.getWhite_pieces();
+        Pieces pieces = new Pieces(); // Creating new pieces and assign them to param
+        black_pieces=pieces.getBlack_pieces();
+        white_pieces=pieces.getWhite_pieces();
 
         /*
-        * This loop assign the pices to board
+        * This loop assign the pieces to board
         * */
         for (int Y = 0; Y < white_pieces.length; Y++) {
             board[black_pieces[Y].getPointWhereIsPiece().x][black_pieces[Y].getPointWhereIsPiece().y]=black_pieces[Y].getNameOnStringBoard();

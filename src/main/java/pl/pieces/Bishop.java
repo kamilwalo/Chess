@@ -4,8 +4,9 @@ import pl.Board.Board;
 import pl.Board.ImagesPieces;
 
 import java.awt.*;
+import java.util.Objects;
 
-public class Bishop extends  MainPice{
+public class Bishop extends MainPiece {
     public Bishop(Point placeOfPiece, boolean isItWhite) {
         super(placeOfPiece, isItWhite, "B  ");
     }
@@ -36,7 +37,7 @@ public class Bishop extends  MainPice{
         possibleBeat(1,-1);
         possibleBeat(-1,-1);
 
-        if(choosedPiece){
+        if(chosePiece){
             try {
                 moveChecker();
             } catch (CloneNotSupportedException e) {
@@ -49,7 +50,7 @@ public class Bishop extends  MainPice{
         int tempX=placeOfPiece.x;
         int tempY= placeOfPiece.y;
         if(tempX+leftRight<8 &&  tempX+leftRight>-1 && tempY+upDown<8 && tempY+upDown>-1){
-            while (board[tempX+leftRight][tempY+upDown]==".  " ||board[tempX+leftRight][tempY+upDown]=="e"){
+            while (Objects.equals(board[tempX + leftRight][tempY + upDown], ".  ") || Objects.equals(board[tempX + leftRight][tempY + upDown], "e")){
 
                 possibleMoves[tempX + leftRight][tempY + upDown] = "Y";
                 tempY += upDown;
@@ -57,7 +58,7 @@ public class Bishop extends  MainPice{
                 if(tempX+leftRight>=8 ||  tempX+leftRight<=-1 || tempY+upDown>=8 || tempY+upDown<=-1) break;
             }
             if(tempX+leftRight<8 &&  tempX+leftRight>-1 && tempY+upDown<8 && tempY+upDown>-1)
-                if (board[tempX+leftRight][tempY+upDown]!=".  " && board[tempX+leftRight][tempY+upDown]!="e" ){
+                if (!Objects.equals(board[tempX + leftRight][tempY + upDown], ".  ") && !Objects.equals(board[tempX + leftRight][tempY + upDown], "e")){
                     if(isItWhite) {
                        possibleBeat(Board.black_pieces,tempX+leftRight,tempY+upDown);
                     }else {
@@ -67,17 +68,17 @@ public class Bishop extends  MainPice{
         }
     }
 
-    private void possibleBeat(MainPice[] pieces, int tempX, int tempY) {
+    private void possibleBeat(MainPiece[] pieces, int tempX, int tempY) {
         Point temPoint = new Point(tempX, tempY);
-        if(board[tempX][tempY]=="e") {
+        if(Objects.equals(board[tempX][tempY], "e")) {
             possibleMoves[tempX][tempY] = "K";
         }
         else
-        for (int i = 0; i < pieces.length; i++) {
-            if(temPoint.equals(pieces[i].getPointWhereIsPiece())){
-                if(possibleMoves[tempX][tempY] != "A")possibleMoves[tempX][tempY]="K";
+            for (MainPiece piece : pieces) {
+                if (temPoint.equals(piece.getPointWhereIsPiece())) {
+                    if (!Objects.equals(possibleMoves[tempX][tempY], "A")) possibleMoves[tempX][tempY] = "K";
+                }
             }
-        }
     }
 
 }

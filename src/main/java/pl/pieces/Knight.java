@@ -4,8 +4,9 @@ import pl.Board.Board;
 import pl.Board.ImagesPieces;
 
 import java.awt.*;
+import java.util.Objects;
 
-public class Knight extends MainPice{
+public class Knight extends MainPiece {
     public Knight(Point placeOfPiece, boolean isItWhite) {
         super(placeOfPiece, isItWhite,"L  ");
     }
@@ -44,7 +45,7 @@ public class Knight extends MainPice{
             possibleBeat(placeOfPiece.x+2, placeOfPiece.y-1, Board.white_pieces);
             possibleBeat(placeOfPiece.x+2, placeOfPiece.y+1, Board.white_pieces);
         }
-        if(choosedPiece){
+        if(chosePiece){
             try {
                 moveChecker();
             } catch (CloneNotSupportedException e) {
@@ -53,13 +54,13 @@ public class Knight extends MainPice{
         }
     }
 
-    private void possibleBeat(int tempX, int tempY, MainPice[] pieces) {
+    private void possibleBeat(int tempX, int tempY, MainPiece[] pieces) {
          if( tempX>=0 && tempX<=7 && tempY>=0 && tempY<=7)
-             if (board[tempX][tempY]==".  " && board[tempX][tempY]!="e")
+             if (Objects.equals(board[tempX][tempY], ".  ") && !Objects.equals(board[tempX][tempY], "e"))
         possibleMoves[tempX][tempY]="Y";else {
-                 for (int i = 0; i < pieces.length; i++) {
-                     if (pieces[i].getPointWhereIsPiece().equals(new Point(tempX,tempY))){
-                         possibleMoves[tempX][tempY]="K";
+                 for (MainPiece piece : pieces) {
+                     if (piece.getPointWhereIsPiece().equals(new Point(tempX, tempY))) {
+                         possibleMoves[tempX][tempY] = "K";
                          break;
                      }
                  }

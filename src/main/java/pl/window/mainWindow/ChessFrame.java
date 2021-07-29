@@ -6,8 +6,6 @@ import pl.window.infoWindow.InfoFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ChessFrame extends JFrame {
     public ChessFrame(){
@@ -18,10 +16,10 @@ public class ChessFrame extends JFrame {
 
         JMenu jGameMenu = new JMenu("Game");
         JMenuItem restartBar = new JMenuItem("Restart");
-        JMenuItem minimalizeWindow = new JMenuItem("Minimalize");
+        JMenuItem minimizeWindow = new JMenuItem("Minimize");
         JMenuItem exit = new JMenuItem("Exit");
         jGameMenu.add(restartBar);
-        jGameMenu.add(minimalizeWindow);
+        jGameMenu.add(minimizeWindow);
         jGameMenu.add(exit);
         jMenuBar.add(jGameMenu);
         setJMenuBar(jMenuBar);
@@ -32,31 +30,16 @@ public class ChessFrame extends JFrame {
         jMenuBar.add(jInfoMenu);
 
 
-        restartBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chessPanel.getBoard().restartGame();
-                chessPanel.repaint();
-            }
+        restartBar.addActionListener(e -> {
+            chessPanel.getBoard().restartGame();
+            chessPanel.repaint();
         });
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        minimalizeWindow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setExtendedState(JFrame.ICONIFIED);
-            }
-        });
-        info.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                InfoFrame infoFrame = new InfoFrame();
-            }
-        });
+
+        exit.addActionListener(e -> System.exit(0));
+
+        minimizeWindow.addActionListener(e -> setExtendedState(JFrame.ICONIFIED));
+
+        info.addActionListener(e -> new InfoFrame());
 
 
         setTitle("Chess made by - Kamil Walo");

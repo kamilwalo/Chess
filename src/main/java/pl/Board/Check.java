@@ -1,54 +1,52 @@
 package pl.Board;
 
-import pl.pieces.MainPice;
-
-import java.awt.*;
+import pl.pieces.MainPiece;
 /*
-* The point of this class is to checking if is check or checkmate ;)
+* The point of this class is checking if is checked or checkmate ;)
 */
 
 public class Check {
     /*
     The point of this method is to return
-    @return true- wahats mean " Yes, its check"
-    @return false - No, itst not check ;)
+    @return true- what's mean " Yes, its check"
+    @return false - No, it's not check ;)
     */
 
-    public boolean isItCheck(MainPice[] firstPices, MainPice queeen) throws CloneNotSupportedException {
-        MainPice queenCopy = queeen.clone();
-        MainPice[] firstPicesCopy = new MainPice[16];
+    public boolean isItCheck(MainPiece[] firstPieces, MainPiece queen) throws CloneNotSupportedException {
+        MainPiece queenCopy = queen.clone();
+        MainPiece[] firstPiecesCopy = new MainPiece[16];
 
-        for (int i = 0; i < firstPicesCopy.length; i++)
-            firstPicesCopy[i] = firstPices[i].clone();
+        for (int i = 0; i < firstPiecesCopy.length; i++)
+            firstPiecesCopy[i] = firstPieces[i].clone();
 
         /*
-        if this loop find "K" on the point where is king, thats mean we got check
+        if this loop find "K" on the point where is king, that's mean we got check
         */
-        for (int i = 0; i < firstPicesCopy.length; i++) {
-            firstPicesCopy[i].possibleMoves();
-                    if (firstPicesCopy[i].getPossibleMoves()[queenCopy.getPointWhereIsPiece().x][queenCopy.getPointWhereIsPiece().y]=="K"){
+        for (int i = 0; i < firstPiecesCopy.length; i++) {
+            firstPiecesCopy[i].possibleMoves();
+                    if (firstPiecesCopy[i].getPossibleMoves()[queenCopy.getPointWhereIsPiece().x][queenCopy.getPointWhereIsPiece().y]=="K"){
                         return true;
                     }
         }return false;
     }
 
-    public boolean isItCheckmate( MainPice[] pice ) throws CloneNotSupportedException {
+    public boolean isItCheckmate( MainPiece[] piece ) throws CloneNotSupportedException {
         /*
         The point of this method is to return
-         true - whats mean - Yes, we got checkmate
+         true - what's mean - Yes, we got checkmate
          false - the other answer ;)
 
-         at the begining the program generate possible moves first pice and
-         checking if its can move somwhere. If he find pice which can move somewhere return true
+         at the beginning the program generate possible moves first piece and
+         checking if its can move somewhere. If he finds piece which can move somewhere return true
          and end the loop by 'return false'.
          */
-        for (int i = 0; i < pice.length; i++) {
-            pice[i].possibleMoves();
-            pice[i].moveChecker();
-            for (int X = 0; X < pice[i].getPossibleMoves().length; X++) {
-                for (int Y = 0; Y < pice[i].getPossibleMoves().length; Y++) {
-                    if(pice[i].getPossibleMoves()[X][Y]!=null) {
-                        //if this loop find something other than null its mean that pice can move somewhere
+        for (int i = 0; i < piece.length; i++) {
+            piece[i].possibleMoves();
+            piece[i].moveChecker();
+            for (int X = 0; X < piece[i].getPossibleMoves().length; X++) {
+                for (int Y = 0; Y < piece[i].getPossibleMoves().length; Y++) {
+                    if(piece[i].getPossibleMoves()[X][Y]!=null) {
+                        //if this loop find something other than null its mean that piece can move somewhere
                         return false;
                     }
                 }

@@ -4,8 +4,9 @@ import pl.Board.Board;
 import pl.Board.ImagesPieces;
 
 import java.awt.*;
+import java.util.Objects;
 
-public class Pawn extends MainPice {
+public class Pawn extends MainPiece {
 
 
     public Pawn(Point point, boolean isItWhite) {
@@ -30,15 +31,15 @@ public class Pawn extends MainPice {
         }
         if (placeOfPiece.y + move < 8 && placeOfPiece.y + move > -1)
             if (firstMove) {
-                if (board[placeOfPiece.x][placeOfPiece.y + move] == ".  ") {
+                if (Objects.equals(board[placeOfPiece.x][placeOfPiece.y + move], ".  ")) {
                     possibleMoves[placeOfPiece.x][placeOfPiece.y + move] = "Y";
-                    if (board[placeOfPiece.x][placeOfPiece.y + (move * 2)] == ".  ") {
+                    if (Objects.equals(board[placeOfPiece.x][placeOfPiece.y + (move * 2)], ".  ")) {
                         possibleMoves[placeOfPiece.x][placeOfPiece.y + (move * 2)] = "E";
                     }
                 }
             } else {
-                //każdy kolejny ruch
-                if (board[placeOfPiece.x][placeOfPiece.y + move] == ".  ") {
+                //every next move
+                if (Objects.equals(board[placeOfPiece.x][placeOfPiece.y + move], ".  ")) {
                     possibleMoves[placeOfPiece.x][placeOfPiece.y + move] = "Y";
                 }
             }
@@ -49,7 +50,7 @@ public class Pawn extends MainPice {
             possibleBeat(Board.white_pieces);
         }
 
-        if (choosedPiece) {
+        if (chosePiece) {
             try {
                 moveChecker();
             } catch (CloneNotSupportedException e) {
@@ -58,19 +59,19 @@ public class Pawn extends MainPice {
         }
     }
 
-    private void possibleBeat(MainPice[] pieces) {
+    private void possibleBeat(MainPiece[] pieces) {
         if (placeOfPiece.x - 1 >= 0 && placeOfPiece.y + move < 8 && placeOfPiece.y + move >= 0) {
-            if (board[placeOfPiece.x - 1][placeOfPiece.y + move] != "e") {
-                if (board[placeOfPiece.x - 1][placeOfPiece.y + move] != ".  ") {
-                    for (int i = 0; i < pieces.length; i++) {
-                        if (new Point(placeOfPiece.x - 1, placeOfPiece.y + move).equals(pieces[i].getPointWhereIsPiece())) {
+            if (!Objects.equals(board[placeOfPiece.x - 1][placeOfPiece.y + move], "e")) {
+                if (!Objects.equals(board[placeOfPiece.x - 1][placeOfPiece.y + move], ".  ")) {
+                    for (MainPiece piece : pieces) {
+                        if (new Point(placeOfPiece.x - 1, placeOfPiece.y + move).equals(piece.getPointWhereIsPiece())) {
                             possibleMoves[placeOfPiece.x - 1][placeOfPiece.y + move] = "K";
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < pieces.length; i++) {
-                    if (new Point(placeOfPiece.x - 1, placeOfPiece.y).equals(pieces[i].getPointWhereIsPiece())) {
+                for (MainPiece piece : pieces) {
+                    if (new Point(placeOfPiece.x - 1, placeOfPiece.y).equals(piece.getPointWhereIsPiece())) {
                         possibleMoves[placeOfPiece.x - 1][placeOfPiece.y + move] = "K";
                     }
                 }
@@ -78,16 +79,16 @@ public class Pawn extends MainPice {
         }
 
         if (placeOfPiece.x + 1 < 8 && placeOfPiece.y + move < 8 && placeOfPiece.y + move > -1) {
-            if (board[placeOfPiece.x + 1][placeOfPiece.y + move] != ".  ") {
-                if (board[placeOfPiece.x + 1][placeOfPiece.y + move] != "e") {
-                    for (int i = 0; i < pieces.length; i++) {
-                        if (new Point(placeOfPiece.x + 1, placeOfPiece.y + move).equals(pieces[i].getPointWhereIsPiece())) {
+            if (!Objects.equals(board[placeOfPiece.x + 1][placeOfPiece.y + move], ".  ")) {
+                if (!Objects.equals(board[placeOfPiece.x + 1][placeOfPiece.y + move], "e")) {
+                    for (MainPiece piece : pieces) {
+                        if (new Point(placeOfPiece.x + 1, placeOfPiece.y + move).equals(piece.getPointWhereIsPiece())) {
                             possibleMoves[placeOfPiece.x + 1][placeOfPiece.y + move] = "K";
                         }
                     }
                 } else {
-                    for (int i = 0; i < pieces.length; i++) {
-                        if (new Point(placeOfPiece.x + 1, placeOfPiece.y).equals(pieces[i].getPointWhereIsPiece())) {
+                    for (MainPiece piece : pieces) {
+                        if (new Point(placeOfPiece.x + 1, placeOfPiece.y).equals(piece.getPointWhereIsPiece())) {
                             possibleMoves[placeOfPiece.x + 1][placeOfPiece.y + move] = "K";
                         }
                     }

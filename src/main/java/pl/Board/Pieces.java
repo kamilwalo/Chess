@@ -5,19 +5,19 @@ import pl.pieces.*;
 import java.awt.*;
 
 /*
-Thic class creating pices
+This class creating pieces
  */
 
 
-public class Pices {
-    private MainPice[] white_pieces = new MainPice[16];
-    private MainPice[] black_pieces = new MainPice[16];
+public class Pieces {
+    private final MainPiece[] white_pieces = new MainPiece[16];
+    private final MainPiece[] black_pieces = new MainPiece[16];
 
-    public Pices(){
+    public Pieces(){
         /*
-        * creating pices is easy
-        * by abstract class MainPice[] I created tab which contains ALL the pices.
-        * in the next step Im adding other pices by giving the Point (where it should by on the board)
+        * creating pieces is easy
+        * by abstract class MainPiece[] I created tab which contains ALL the pieces.
+        * in the next step I'm adding other pieces by giving the Point (where it should be on the board)
         * and I'm giving them information what color they are
         * */
         for (int i = 0; i < 8; i++) {
@@ -47,11 +47,11 @@ public class Pices {
         black_pieces[15] = new King(new Point(4,0),false);
     }
 
-    public MainPice[] getWhite_pieces() {
+    public MainPiece[] getWhite_pieces() {
         return white_pieces;
     }
 
-    public MainPice[] getBlack_pieces() {
+    public MainPiece[] getBlack_pieces() {
         return black_pieces;
     }
 }

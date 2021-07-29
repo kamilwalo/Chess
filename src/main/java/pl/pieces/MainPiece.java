@@ -7,16 +7,16 @@ import pl.window.Promotion;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
+import java.util.Objects;
 
 /*
 * This is abstract class.
-* The point of this class is to creating pice in the same tab.
-* @parm placeOfPice - contains place where is pice
-* @parm possibleMoves - contains String[][] which have all possible moves
+* The point of this class is creating piece in the same tab.
+* @param placeOfPiece - contains place where is piece
+* @param possibleMoves - contains String[][] which have all possible moves
 * */
 
-public abstract class MainPice implements Cloneable{
+public abstract class MainPiece implements Cloneable{
     protected Point placeOfPiece;
     protected boolean isItWhite;
     protected static String[][] possibleMoves = new String[8][8];
@@ -25,9 +25,9 @@ public abstract class MainPice implements Cloneable{
     protected int move=1;
     protected boolean isAlive= true;
     protected String nameOnBoard;
-    protected boolean choosedPiece=false;
-    private int idPice;
-    private Check checkmate = Board.checkmate;
+    protected boolean chosePiece =false;
+    private int idPiece;
+    private final Check checkmate = Board.checkmate;
 
     public void setPlaceOfPiece(Point placeOfPiece) {
         this.placeOfPiece = placeOfPiece;
@@ -41,24 +41,24 @@ public abstract class MainPice implements Cloneable{
         return firstMove;
     }
 
-    public void setChoosedPiece(boolean choosedPiece) {
-        this.choosedPiece = choosedPiece;
+    public void setChosePiece(boolean chosePiece) {
+        this.chosePiece = chosePiece;
     }
 
-    public MainPice(Point placeOfPiece, boolean isItWhite, String nameOnBoard) {
+    public MainPiece(Point placeOfPiece, boolean isItWhite, String nameOnBoard) {
         this.placeOfPiece = placeOfPiece;
         this.isItWhite = isItWhite;
         this.nameOnBoard = nameOnBoard;
         if(isItWhite) move *=-1;
     }
 
-    public void beatThePiece(Point pointChoosedByUser,MainPice[] piece1) {
-        for (int i = 0; i < piece1.length; i++) {
-            if (piece1[i].getPointWhereIsPiece().equals(pointChoosedByUser)){
+    public void beatThePiece(Point pointChosenByUser, MainPiece[] piece1) {
+        for (MainPiece mainPiece : piece1) {
+            if (mainPiece.getPointWhereIsPiece().equals(pointChosenByUser)) {
                 board[placeOfPiece.x][placeOfPiece.y] = ".  ";
-                placeOfPiece = piece1[i].getPointWhereIsPiece();
+                placeOfPiece = mainPiece.getPointWhereIsPiece();
                 board[placeOfPiece.x][placeOfPiece.y] = nameOnBoard;
-                piece1[i].killPiece();
+                mainPiece.killPiece();
                 break;
             }
         }
@@ -75,52 +75,52 @@ public abstract class MainPice implements Cloneable{
 
     public Image imagePiece() { return null; }
 
-    public void move(Point pointChoosedByUser) throws CloneNotSupportedException {
+    public void move(Point pointChosenByUser) throws CloneNotSupportedException {
 
 
-        //this  'if' let plaer to castle his pices
-        if(pointChoosedByUser.equals(new Point(6,7)) && nameOnBoard=="K  " && firstMove && Board.white_pieces[9].isFirstMove() && isItWhite  ){
+        //this  'if' let player castle his pieces
+        if(pointChosenByUser.equals(new Point(6,7)) && Objects.equals(nameOnBoard, "K  ") && firstMove && Board.white_pieces[9].isFirstMove() && isItWhite  ){
             castling(Board.white_pieces[9]);
         }else
-        if(pointChoosedByUser.equals(new Point(6,0)) && nameOnBoard=="K  " && firstMove && Board.black_pieces[9].isFirstMove() && !isItWhite){
+        if(pointChosenByUser.equals(new Point(6,0)) && Objects.equals(nameOnBoard, "K  ") && firstMove && Board.black_pieces[9].isFirstMove() && !isItWhite){
             castling(Board.black_pieces[9]);
         }
-            //this  'ifs' let plaer to move pice, kill pice or en passant
-        if (possibleMoves[pointChoosedByUser.x][pointChoosedByUser.y] == "Y" ) {
+            //this  'ifs' let player move piece, kill piece or en passant
+        if (Objects.equals(possibleMoves[pointChosenByUser.x][pointChosenByUser.y], "Y")) {
                     firstMove = false;
                     board[placeOfPiece.x][placeOfPiece.y] = ".  ";
-                    placeOfPiece = pointChoosedByUser;
-                    board[pointChoosedByUser.x][pointChoosedByUser.y] = nameOnBoard;
+                    placeOfPiece = pointChosenByUser;
+                    board[pointChosenByUser.x][pointChosenByUser.y] = nameOnBoard;
                 }else
-        if (possibleMoves[pointChoosedByUser.x][pointChoosedByUser.y] == "E"){
+        if (Objects.equals(possibleMoves[pointChosenByUser.x][pointChosenByUser.y], "E")){
                         firstMove = false;
                         board[placeOfPiece.x][placeOfPiece.y] = ".  ";
-                        placeOfPiece = pointChoosedByUser;
-                        board[pointChoosedByUser.x][pointChoosedByUser.y] = nameOnBoard;
+                        placeOfPiece = pointChosenByUser;
+                        board[pointChosenByUser.x][pointChosenByUser.y] = nameOnBoard;
                     }else
-        if(possibleMoves[pointChoosedByUser.x][pointChoosedByUser.y]=="K" && board[pointChoosedByUser.x][pointChoosedByUser.y]!="e")  {
+        if(Objects.equals(possibleMoves[pointChosenByUser.x][pointChosenByUser.y], "K") && !Objects.equals(board[pointChosenByUser.x][pointChosenByUser.y], "e"))  {
                     if (isItWhite) {
-                        beatThePiece(pointChoosedByUser, Board.black_pieces);
+                        beatThePiece(pointChosenByUser, Board.black_pieces);
                     } else {
-                        beatThePiece(pointChoosedByUser, Board.white_pieces);
+                        beatThePiece(pointChosenByUser, Board.white_pieces);
                     }
                     firstMove = false;
                     board[placeOfPiece.x][placeOfPiece.y] = ".  ";
-                    placeOfPiece = pointChoosedByUser;
-                    board[pointChoosedByUser.x][pointChoosedByUser.y] = nameOnBoard;
+                    placeOfPiece = pointChosenByUser;
+                    board[pointChosenByUser.x][pointChosenByUser.y] = nameOnBoard;
                 }else
-        if(possibleMoves[pointChoosedByUser.x][pointChoosedByUser.y]=="K" && board[pointChoosedByUser.x][pointChoosedByUser.y]=="e" && nameOnBoard=="P  "){
+        if(Objects.equals(possibleMoves[pointChosenByUser.x][pointChosenByUser.y], "K") && Objects.equals(board[pointChosenByUser.x][pointChosenByUser.y], "e") && Objects.equals(nameOnBoard, "P  ")){
             if (isItWhite) {
-                beatThePiece(new Point(pointChoosedByUser.x, pointChoosedByUser.y+1), Board.black_pieces);
+                beatThePiece(new Point(pointChosenByUser.x, pointChosenByUser.y+1), Board.black_pieces);
             } else {
-                beatThePiece(new Point(pointChoosedByUser.x, pointChoosedByUser.y-1), Board.white_pieces);
+                beatThePiece(new Point(pointChosenByUser.x, pointChosenByUser.y-1), Board.white_pieces);
             }
             firstMove = false;
             board[placeOfPiece.x][placeOfPiece.y] = ".  ";
-            placeOfPiece = pointChoosedByUser;
-            board[pointChoosedByUser.x][pointChoosedByUser.y] = nameOnBoard;
+            placeOfPiece = pointChosenByUser;
+            board[pointChosenByUser.x][pointChosenByUser.y] = nameOnBoard;
         }
-        if ((placeOfPiece.y==0 || placeOfPiece.y==7) && nameOnBoard=="P  "){
+        if ((placeOfPiece.y==0 || placeOfPiece.y==7) && Objects.equals(nameOnBoard, "P  ")){
             JFrame frame = new JFrame();
             frame.setIconImage(ImagesPieces.getBlackKnightImage());
             Promotion promotion = new Promotion(frame);
@@ -139,7 +139,7 @@ public abstract class MainPice implements Cloneable{
         return isItWhite;
     }
 
-    private void castling(MainPice rook) throws CloneNotSupportedException {
+    private void castling(MainPiece rook) throws CloneNotSupportedException {
         if(isItWhite)rook.move(new Point(5,7));
         else rook.move(new Point(5,0));
     }
@@ -152,20 +152,18 @@ public abstract class MainPice implements Cloneable{
 
 
     public void moveChecker() throws CloneNotSupportedException {
-    /*this method checing what moves is possible to move. If it is check the promam wouldnt let player to move
-    * the pice another than stop check
+    /*this method checking what moves are possible to move. If it is checked the program wouldn't let player move
+    * the piece another than stop check
     * */
 
             Point actualPositionOfPiece = new Point(placeOfPiece.x, placeOfPiece.y);
             String[][] possibleMovesCopy = new String[8][8];
             for (int X = 0; X < possibleMovesCopy.length; X++) {
-                for (int Y = 0; Y < possibleMovesCopy.length; Y++) {
-                    possibleMovesCopy[X][Y] = possibleMoves[X][Y];
-                }
+                System.arraycopy(possibleMoves[X], 0, possibleMovesCopy[X], 0, possibleMovesCopy.length);
             }
             for (int X = 0; X < possibleMovesCopy.length; X++) {
                 for (int Y = 0; Y < possibleMovesCopy.length; Y++) {
-                    if (possibleMovesCopy[X][Y] == "Y"|| possibleMovesCopy[X][Y]=="E") {
+                    if (Objects.equals(possibleMovesCopy[X][Y], "Y") || Objects.equals(possibleMovesCopy[X][Y], "E")) {
                         board[placeOfPiece.x][placeOfPiece.y] = ".  ";
                         placeOfPiece = new Point(X, Y);
                         board[X][Y] = nameOnBoard;
@@ -180,14 +178,14 @@ public abstract class MainPice implements Cloneable{
                         placeOfPiece = new Point(actualPositionOfPiece.x, actualPositionOfPiece.y);
                         board[actualPositionOfPiece.x][actualPositionOfPiece.y] = nameOnBoard;
                     }
-                    if(possibleMovesCopy[X][Y]=="K" && board[X][Y]!="e"){
-                        MainPice tempPice;
+                    if(Objects.equals(possibleMovesCopy[X][Y], "K") && !Objects.equals(board[X][Y], "e")){
+                        MainPiece tempPiece;
 
-                        if(isItWhite) tempPice= lookForPice(Board.black_pieces,X,Y).clone();
-                        else tempPice= lookForPice(Board.white_pieces,X,Y).clone();
+                        if(isItWhite) tempPiece= Objects.requireNonNull(lookForPiece(Board.black_pieces, X, Y)).clone();
+                        else tempPiece= Objects.requireNonNull(lookForPiece(Board.white_pieces, X, Y)).clone();
 
-                        if (isItWhite)   beatThePiece(tempPice.getPointWhereIsPiece(), Board.black_pieces);
-                        else   beatThePiece(tempPice.getPointWhereIsPiece(), Board.white_pieces);
+                        if (isItWhite)   beatThePiece(tempPiece.getPointWhereIsPiece(), Board.black_pieces);
+                        else   beatThePiece(tempPiece.getPointWhereIsPiece(), Board.white_pieces);
 
                         if(isItWhite) {
                             if (checkmate.isItCheck(Board.black_pieces, Board.white_pieces[15]))
@@ -197,26 +195,26 @@ public abstract class MainPice implements Cloneable{
                                 possibleMovesCopy[X][Y] = null;
                         }
 
-                        board[X][Y]=tempPice.getNameOnStringBoard();
+                        board[X][Y]=tempPiece.getNameOnStringBoard();
 
-                        if(isItWhite) Board.black_pieces[idPice]=tempPice;
-                        else Board.white_pieces[idPice]=tempPice;
+                        if(isItWhite) Board.black_pieces[idPiece]=tempPiece;
+                        else Board.white_pieces[idPiece]=tempPiece;
 
                         placeOfPiece = new Point(actualPositionOfPiece.x,actualPositionOfPiece.y);
                         board[actualPositionOfPiece.x][actualPositionOfPiece.y] = nameOnBoard;
                     }
-                    if(possibleMovesCopy[X][Y]=="K" && board[X][Y]=="e"){
-                        MainPice tempPice;
+                    if(Objects.equals(possibleMovesCopy[X][Y], "K") && Objects.equals(board[X][Y], "e")){
+                        MainPiece tempPiece;
 
-                        if(isItWhite) tempPice= lookForPice(Board.black_pieces,X,Y+1).clone();
-                        else tempPice= lookForPice(Board.white_pieces,X,Y-1).clone();
+                        if(isItWhite) tempPiece= Objects.requireNonNull(lookForPiece(Board.black_pieces, X, Y + 1)).clone();
+                        else tempPiece= Objects.requireNonNull(lookForPiece(Board.white_pieces, X, Y - 1)).clone();
 
-                        if (isItWhite)   beatThePiece(tempPice.getPointWhereIsPiece(), Board.black_pieces);
-                        else   beatThePiece(tempPice.getPointWhereIsPiece(), Board.white_pieces);
+                        if (isItWhite)   beatThePiece(tempPiece.getPointWhereIsPiece(), Board.black_pieces);
+                        else   beatThePiece(tempPiece.getPointWhereIsPiece(), Board.white_pieces);
 
                         if(isItWhite) {
                             if (checkmate.isItCheck(Board.black_pieces, Board.white_pieces[15]))
-                                possibleMovesCopy[X][Y] = null; //nie pozwoli ruszyć się białym jeżeli nadal będzie mat
+                                possibleMovesCopy[X][Y] = null; //It wouldn't let move piece if it's mate
                         }else {
                             if (checkmate.isItCheck(Board.white_pieces, Board.black_pieces[15]))
                                 possibleMovesCopy[X][Y] = null;
@@ -224,11 +222,10 @@ public abstract class MainPice implements Cloneable{
 
                         board[X][Y]="e";
 
-                        if(isItWhite) Board.black_pieces[idPice]=tempPice;
-                        else Board.white_pieces[idPice]=tempPice;
+                        if(isItWhite) Board.black_pieces[idPiece]=tempPiece;
+                        else Board.white_pieces[idPiece]=tempPiece;
 
-                        if(isItWhite)tempPice.setPlaceOfPiece(new Point(tempPice.getPointWhereIsPiece().x,tempPice.getPointWhereIsPiece().y));
-                        else tempPice.setPlaceOfPiece(new Point(tempPice.getPointWhereIsPiece().x,tempPice.getPointWhereIsPiece().y));
+                        tempPiece.setPlaceOfPiece(new Point(tempPiece.getPointWhereIsPiece().x,tempPiece.getPointWhereIsPiece().y));
 
                         placeOfPiece = new Point(actualPositionOfPiece.x,actualPositionOfPiece.y);
                         board[actualPositionOfPiece.x][actualPositionOfPiece.y] = nameOnBoard;
@@ -239,25 +236,25 @@ public abstract class MainPice implements Cloneable{
             board[placeOfPiece.x][placeOfPiece.y] = ".  ";
             placeOfPiece = actualPositionOfPiece;
             board[actualPositionOfPiece.x][actualPositionOfPiece.y] = nameOnBoard;
-            choosedPiece=false;
+            chosePiece =false;
 
     }
 
-    private MainPice lookForPice(MainPice[] pices, int x, int y) {
-        //lookForPice looking for pice with Point which playsOfPice is equal Point(x,y)
-        for (int i = 0; i < pices.length; i++) {
-            if(pices[i].getPointWhereIsPiece().equals(new Point(x,y))) {
-                idPice=i;
-                return pices[i];
+    private MainPiece lookForPiece(MainPiece[] pieces, int x, int y) {
+        //lookForPiece looking for piece with Point which playsOfPiece is equal Point(x,y)
+        for (int i = 0; i < pieces.length; i++) {
+            if(pieces[i].getPointWhereIsPiece().equals(new Point(x,y))) {
+                idPiece =i;
+                return pieces[i];
             }
         }return null;
     }
 
     @Override
-    public MainPice clone() throws CloneNotSupportedException {
-        return (MainPice) super.clone();
+    public MainPiece clone() throws CloneNotSupportedException {
+        return (MainPiece) super.clone();
     }
 
-    public void possibleMoves() {// every pice has his own generator of possible moves
+    public void possibleMoves() {// every piece has his own generator of possible moves
     }
 }

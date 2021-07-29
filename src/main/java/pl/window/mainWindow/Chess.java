@@ -6,9 +6,6 @@ package pl.window.mainWindow;
 * @author Kamil W.
 * */
 
-import pl.Board.Board;
-import pl.window.Promotion;
-
 public class Chess {
     public static void main(String[] args) {
         new ChessFrame();
